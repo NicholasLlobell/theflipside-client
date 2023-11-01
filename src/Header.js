@@ -1,12 +1,17 @@
 import {Link} from "react-router-dom";
 import {useContext, useEffect, useState} from "react";
+import { useNavigate } from "react-router-dom";
 import {UserContext} from "./UserContext";
+import { API_URL } from "./services/API_URL";
 
 export default function Header() {
-  const {setUserInfo,userInfo} = useContext(UserContext);
+  const {setUserInfo,userInfo, removeToken} = useContext(UserContext);
+  const navigate = useNavigate()
   useEffect(() => {
-    fetch('http://localhost:4000/profile', {
-      credentials: 'include',
+    let token = localStorage.getItem('authToken')
+    // userInfo &&
+    fetch(`${API_URL}/profile`, {
+      headers: { Authorization: `Bearer ${token}` }
     }).then(response => {
       response.json().then(userInfo => {
         setUserInfo(userInfo);
@@ -15,11 +20,10 @@ export default function Header() {
   }, []);
 
   function logout() {
-    fetch('http://localhost:4000/logout', {
-      credentials: 'include',
-      method: 'POST',
-    });
+
     setUserInfo(null);
+    removeToken()
+    navigate('/')
   }
 
   const username = userInfo?.username;

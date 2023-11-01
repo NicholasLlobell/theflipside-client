@@ -1,8 +1,13 @@
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
-import {useState} from "react";
+import {useState, useContext} from "react";
 import {Navigate} from "react-router-dom";
 import Editor from "../Editor";
+import axios from "axios";
+import { API_URL } from "../services/API_URL";
+import { photoUpload } from "../services/photoUpload";
+
+import { UserContext } from "../UserContext";
 
 export default function CreatePost() {
   const [title,setTitle] = useState('');
@@ -10,19 +15,35 @@ export default function CreatePost() {
   const [content,setContent] = useState('');
   const [files, setFiles] = useState('');
   const [redirect, setRedirect] = useState(false);
+  const [disabled, setDisabled] = useState(false)
+  const {userInfo} = useContext(UserContext);
+
+  const handleFileChange = (e) => {
+    setDisabled(true)
+    photoUpload(e)
+    .then((response) => {
+      setFiles(response.data.image)
+      setDisabled(false)
+    })
+    .catch((err) => {
+      console.log(err)
+      setDisabled(false)
+    })
+  }
   async function createNewPost(ev) {
-    const data = new FormData();
-    data.set('title', title);
-    data.set('summary', summary);
-    data.set('content', content);
-    data.set('file', files[0]);
     ev.preventDefault();
-    const response = await fetch('http://localhost:4000/post', {
-      method: 'POST',
-      body: data,
-      credentials: 'include',
-    });
-    if (response.ok) {
+    const data = {
+      title,
+      summary,
+      content,
+      files,
+      author:  userInfo._id
+    }
+
+    console.log("Data", data)
+
+    const response = await axios.post(`${API_URL}/post`, data);
+    if (response.data.cover) {
       setRedirect(true);
     }
   }
@@ -41,9 +62,9 @@ export default function CreatePost() {
              value={summary}
              onChange={ev => setSummary(ev.target.value)} />
       <input type="file"
-             onChange={ev => setFiles(ev.target.files)} />
+             onChange={handleFileChange} />
       <Editor value={content} onChange={setContent} />
-      <button style={{marginTop:'5px'}}>Create Flip</button>
+      <button disabled={disabled} style={{marginTop:'5px'}}>Create Flip</button>
     </form>
   );
 }
