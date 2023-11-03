@@ -35,7 +35,10 @@ export default function Header() {
         {username && (
           <>
             <Link to="/create">Create Flip</Link>
-            <a onClick={logout}>Logout({username})</a>
+            <a>Trending</a>
+            <a>Discover</a>
+            <a>Profile</a>
+            <a onClick={logout}>Logout({username}🐬)</a>
           </>
         )}
         {!username && (

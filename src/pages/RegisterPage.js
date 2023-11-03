@@ -19,7 +19,7 @@ export default function RegisterPage() {
   }
   return (
     <form className="register" onSubmit={register}>
-      <h1>Reservoir Registery 🐬</h1>
+      <h1>Reservoir Registry 🐬</h1>
       <input type="text"
              placeholder="Username"
              value={username}

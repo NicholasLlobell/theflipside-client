@@ -23,7 +23,7 @@ export default function IndexPage() {
                     })
                 }
             </>
-            : <p>Loading...</p>
+            : <p>Wave Riding...</p>
         }
     </>
 )

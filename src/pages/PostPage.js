@@ -78,7 +78,7 @@ export default function PostPage() {
 
       <div>
         <form onSubmit={addComment}>
-          <h2>Add Comment</h2>
+          <h2>Add Comment Clam 🦪</h2>
           <label>New Comment:
             <input type="text" name="comment" onChange={handleChange} value={comment} />
           </label>
@@ -98,7 +98,7 @@ export default function PostPage() {
           }
         </>
         : 
-        <p>No comments yet...</p>}
+        <p>No comment clams...</p>}
       </div>
 
     </div>
